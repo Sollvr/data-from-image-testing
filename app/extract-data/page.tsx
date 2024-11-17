@@ -14,7 +14,31 @@
 
 
 
-import { useState, useEffect } from 'react'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import { useState, useEffect, useRef } from 'react'
+
+
+
+
+
+
+
+
 
 
 
@@ -30,7 +54,23 @@ import { Button } from "@/components/ui/button"
 
 
 
+
+
+
+
+
+
+
+
 import { Card } from "@/components/ui/card"
+
+
+
+
+
+
+
+
 
 
 
@@ -46,6 +86,14 @@ import { Input } from "@/components/ui/input"
 
 
 
+
+
+
+
+
+
+
+
 import { Textarea } from "@/components/ui/textarea"
 
 
@@ -54,7 +102,23 @@ import { Textarea } from "@/components/ui/textarea"
 
 
 
-import { Copy, Upload, HelpCircle, LogOut } from 'lucide-react'
+
+
+
+
+
+
+
+
+import { Copy, Upload, HelpCircle, LogOut, Download } from 'lucide-react'
+
+
+
+
+
+
+
+
 
 
 
@@ -70,7 +134,23 @@ import { supabase } from '@/lib/supabase'
 
 
 
+
+
+
+
+
+
+
+
 import { useRouter } from 'next/navigation'
+
+
+
+
+
+
+
+
 
 
 
@@ -86,7 +166,23 @@ import {
 
 
 
+
+
+
+
+
+
+
+
   Tooltip,
+
+
+
+
+
+
+
+
 
 
 
@@ -102,6 +198,14 @@ import {
 
 
 
+
+
+
+
+
+
+
+
   TooltipProvider,
 
 
@@ -110,7 +214,23 @@ import {
 
 
 
+
+
+
+
+
+
+
+
   TooltipTrigger,
+
+
+
+
+
+
+
+
 
 
 
@@ -134,7 +254,31 @@ import {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 type User = {
+
+
+
+
+
+
+
+
 
 
 
@@ -150,7 +294,23 @@ type User = {
 
 
 
+
+
+
+
+
+
+
+
   email?: string;
+
+
+
+
+
+
+
+
 
 
 
@@ -166,7 +326,23 @@ type User = {
 
 
 
+
+
+
+
+
+
+
+
   updated_at?: string;
+
+
+
+
+
+
+
+
 
 
 
@@ -182,7 +358,23 @@ type User = {
 
 
 
+
+
+
+
+
+
+
+
     provider?: string;
+
+
+
+
+
+
+
+
 
 
 
@@ -198,7 +390,23 @@ type User = {
 
 
 
+
+
+
+
+
+
+
+
   };
+
+
+
+
+
+
+
+
 
 
 
@@ -214,7 +422,23 @@ type User = {
 
 
 
+
+
+
+
+
+
+
+
     [key: string]: unknown;
+
+
+
+
+
+
+
+
 
 
 
@@ -230,7 +454,23 @@ type User = {
 
 
 
+
+
+
+
+
+
+
+
   aud?: string;
+
+
+
+
+
+
+
+
 
 
 
@@ -246,7 +486,23 @@ type User = {
 
 
 
+
+
+
+
+
+
+
+
   email_confirmed_at?: string;
+
+
+
+
+
+
+
+
 
 
 
@@ -262,7 +518,23 @@ type User = {
 
 
 
+
+
+
+
+
+
+
+
   confirmed_at?: string;
+
+
+
+
+
+
+
+
 
 
 
@@ -278,6 +550,14 @@ type User = {
 
 
 
+
+
+
+
+
+
+
+
   factor_id?: string;
 
 
@@ -286,7 +566,31 @@ type User = {
 
 
 
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -310,7 +614,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   const [prompt, setPrompt] = useState('')
+
+
+
+
+
+
+
+
 
 
 
@@ -326,7 +646,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   const [newTag, setNewTag] = useState('')
+
+
+
+
+
+
+
+
 
 
 
@@ -342,7 +678,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   const [isProcessing, setIsProcessing] = useState(false)
+
+
+
+
+
+
+
+
 
 
 
@@ -358,7 +710,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   const router = useRouter()
+
+
+
+
+
+
+
+
 
 
 
@@ -382,7 +750,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
+
+
+
+
+
+
+
+
 
 
 
@@ -398,7 +790,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       const { data: { user } } = await supabase.auth.getUser()
+
+
+
+
+
+
+
+
 
 
 
@@ -414,6 +822,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
     }
 
 
@@ -422,7 +838,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
     getUser()
+
+
+
+
+
+
+
+
 
 
 
@@ -446,7 +878,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const handleSignOut = async () => {
+
+
+
+
+
+
+
+
 
 
 
@@ -462,6 +918,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
     router.push('/auth')
 
 
@@ -470,7 +934,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -494,7 +982,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
     e.preventDefault()
+
+
+
+
+
+
+
+
 
 
 
@@ -510,6 +1014,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
     setFiles(prev => [...prev, ...droppedFiles])
 
 
@@ -518,7 +1030,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -542,7 +1078,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
     if (e.target.files) {
+
+
+
+
+
+
+
+
 
 
 
@@ -558,7 +1110,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       setFiles(prev => [...prev, ...selectedFiles])
+
+
+
+
+
+
+
+
 
 
 
@@ -574,7 +1142,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -598,7 +1190,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
     if (newTag && !tags.includes(newTag)) {
+
+
+
+
+
+
+
+
 
 
 
@@ -614,7 +1222,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       setNewTag('')
+
+
+
+
+
+
+
+
 
 
 
@@ -630,7 +1254,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -654,6 +1302,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
     setTags(tags.filter(tag => tag !== tagToRemove))
 
 
@@ -662,7 +1318,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -686,7 +1366,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
     setIsProcessing(true)
+
+
+
+
+
+
+
+
 
 
 
@@ -702,7 +1398,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       const base64Images = await Promise.all(
+
+
+
+
+
+
+
+
 
 
 
@@ -718,7 +1430,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
           return new Promise<string>((resolve, reject) => {
+
+
+
+
+
+
+
+
 
 
 
@@ -734,7 +1462,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
             reader.onload = e => {
+
+
+
+
+
+
+
+
 
 
 
@@ -750,7 +1494,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               resolve(result)
+
+
+
+
+
+
+
+
 
 
 
@@ -766,7 +1526,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
             reader.onerror = error => reject(error)
+
+
+
+
+
+
+
+
 
 
 
@@ -782,6 +1558,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
           })
 
 
@@ -790,7 +1574,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
         })
+
+
+
+
+
+
+
+
 
 
 
@@ -814,7 +1614,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       const response = await fetch('/api/extract-text', {
+
+
+
+
+
+
+
+
 
 
 
@@ -830,7 +1654,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
         headers: {
+
+
+
+
+
+
+
+
 
 
 
@@ -846,7 +1686,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
         },
+
+
+
+
+
+
+
+
 
 
 
@@ -862,7 +1718,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
           base64Images,
+
+
+
+
+
+
+
+
 
 
 
@@ -878,7 +1750,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
         })
+
+
+
+
+
+
+
+
 
 
 
@@ -902,7 +1790,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       const data = await response.json()
+
+
+
+
+
+
+
+
 
 
 
@@ -926,7 +1838,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       if (data.extractedText && user) {
+
+
+
+
+
+
+
+
 
 
 
@@ -942,7 +1878,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
           await supabase
+
+
+
+
+
+
+
+
 
 
 
@@ -958,7 +1910,24 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+
             .insert({
+
+
+
+
+
+
+
+
 
 
 
@@ -974,7 +1943,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               filename: file.name,
+
+
+
+
+
+
+
+
 
 
 
@@ -990,7 +1975,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               requirements: prompt,
+
+
+
+
+
+
+
+
 
 
 
@@ -1006,7 +2007,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
             })
+
+
+
+
+
+
+
+
 
 
 
@@ -1022,7 +2039,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       }
+
+
+
+
+
+
+
+
 
 
 
@@ -1038,7 +2071,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       console.error('Error processing images:', error)
+
+
+
+
+
+
+
+
 
 
 
@@ -1054,6 +2103,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       setIsProcessing(false)
 
 
@@ -1062,7 +2119,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
     }
+
+
+
+
+
+
+
+
 
 
 
@@ -1086,7 +2159,889 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const handleExport = (format: 'csv' | 'txt' | 'json') => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (!extractedText) return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    let content: string;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    let mimeType: string;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    let fileExtension: string;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    switch (format) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      case 'csv':
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        content = extractedText.split('\n').map(line => `"${line}"`).join('\n');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        mimeType = 'text/csv';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        fileExtension = 'csv';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      case 'json':
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        const jsonData = {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          timestamp: new Date().toISOString(),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          requirements: prompt,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          extractedText: extractedText.split('\n'),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          metadata: {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            files: files.map(f => f.name),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            tags
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        content = JSON.stringify(jsonData, null, 2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        mimeType = 'application/json';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        fileExtension = 'json';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      default:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        content = extractedText;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        mimeType = 'text/plain';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        fileExtension = 'txt';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const blob = new Blob([content], { type: mimeType });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const url = URL.createObjectURL(blob);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const a = document.createElement('a');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    a.href = url;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    a.download = `extracted_text_${new Date().toISOString().split('T')[0]}.${fileExtension}`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    document.body.appendChild(a);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    a.click();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    document.body.removeChild(a);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    URL.revokeObjectURL(url);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const exportMenuRef = useRef<HTMLDivElement>(null);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  useEffect(() => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function handleClickOutside(event: MouseEvent) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      if (exportMenuRef.current && !exportMenuRef.current.contains(event.target as Node)) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        setShowExportMenu(false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      }
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }, []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   return (
+
+
+
+
+
+
+
+
 
 
 
@@ -1102,7 +3057,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       <header className="border-b">
+
+
+
+
+
+
+
+
 
 
 
@@ -1118,7 +3089,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
           <div className="flex items-center gap-4">
+
+
+
+
+
+
+
+
 
 
 
@@ -1134,7 +3121,690 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+            <div className="relative" ref={exportMenuRef}>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <Button
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                variant="outline"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                className="flex items-center gap-2"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                onClick={() => setShowExportMenu(!showExportMenu)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                disabled={!extractedText}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <Download className="w-4 h-4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <span>Export</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              </Button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              {showExportMenu && (
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div className="absolute top-full left-0 mt-1 w-48 bg-background border rounded-md shadow-lg py-1 z-50">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  <button
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    className="w-full px-4 py-2 text-left hover:bg-muted flex items-center gap-2"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    onClick={() => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      handleExport('txt');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      setShowExportMenu(false);
+
+
+
+
+
+
+
+
+
+                    }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    Export as .txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  <button
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    className="w-full px-4 py-2 text-left hover:bg-muted flex items-center gap-2"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    onClick={() => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      handleExport('csv');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      setShowExportMenu(false);
+
+
+
+
+
+
+
+
+
+                    }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    Export as .csv
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  <button
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    className="w-full px-4 py-2 text-left hover:bg-muted flex items-center gap-2"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    onClick={() => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      handleExport('json');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      setShowExportMenu(false);
+
+
+
+
+
+
+
+
+
+                    }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    Export as .json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <Button 
+
+
+
+
+
+
+
+
 
 
 
@@ -1150,7 +3820,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               className="flex items-center gap-2 text-muted-foreground hover:text-destructive"
+
+
+
+
+
+
+
+
 
 
 
@@ -1166,7 +3852,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
             >
+
+
+
+
+
+
+
+
 
 
 
@@ -1182,7 +3884,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               <span>Logout</span>
+
+
+
+
+
+
+
+
 
 
 
@@ -1198,7 +3916,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
           </div>
+
+
+
+
+
+
+
+
 
 
 
@@ -1214,7 +3948,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
             {user?.email}
+
+
+
+
+
+
+
+
 
 
 
@@ -1230,7 +3980,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
         </div>
+
+
+
+
+
+
+
+
 
 
 
@@ -1254,7 +4020,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       <main className="container py-6">
+
+
+
+
+
+
+
+
 
 
 
@@ -1270,7 +4060,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
           <div className="space-y-6">
+
+
+
+
+
+
+
+
 
 
 
@@ -1286,7 +4092,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               <div className="flex items-center gap-2 mb-4">
+
+
+
+
+
+
+
+
 
 
 
@@ -1302,7 +4124,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 <TooltipProvider>
+
+
+
+
+
+
+
+
 
 
 
@@ -1318,7 +4156,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                     <TooltipTrigger>
+
+
+
+
+
+
+
+
 
 
 
@@ -1334,7 +4188,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                     </TooltipTrigger>
+
+
+
+
+
+
+
+
 
 
 
@@ -1350,7 +4220,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                       <p>Upload images to extract text from</p>
+
+
+
+
+
+
+
+
 
 
 
@@ -1366,7 +4252,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   </Tooltip>
+
+
+
+
+
+
+
+
 
 
 
@@ -1382,7 +4284,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1406,7 +4332,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 placeholder="Specify what information you want to extract from the images (e.g., 'Extract all dates and amounts from these receipts')"
+
+
+
+
+
+
+
+
 
 
 
@@ -1422,6 +4364,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 onChange={(e) => setPrompt(e.target.value)}
 
 
@@ -1430,7 +4380,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 className="mb-4"
+
+
+
+
+
+
+
+
 
 
 
@@ -1454,7 +4420,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               <div
+
+
+
+
+
+
+
+
 
 
 
@@ -1470,7 +4460,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 onDrop={handleDrop}
+
+
+
+
+
+
+
+
 
 
 
@@ -1486,7 +4492,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 onClick={() => document.getElementById('file-input')?.click()}
+
+
+
+
+
+
+
+
 
 
 
@@ -1502,7 +4524,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 <Upload className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
+
+
+
+
+
+
+
+
 
 
 
@@ -1518,7 +4556,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 <p className="text-sm text-muted-foreground mt-1">
+
+
+
+
+
+
+
+
 
 
 
@@ -1534,7 +4588,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 </p>
+
+
+
+
+
+
+
+
 
 
 
@@ -1550,7 +4620,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   id="file-input"
+
+
+
+
+
+
+
+
 
 
 
@@ -1566,7 +4652,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   multiple
+
+
+
+
+
+
+
+
 
 
 
@@ -1582,7 +4684,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   className="hidden"
+
+
+
+
+
+
+
+
 
 
 
@@ -1598,6 +4716,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 />
 
 
@@ -1606,7 +4732,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1630,7 +4780,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 <div className="mt-4">
+
+
+
+
+
+
+
+
 
 
 
@@ -1646,7 +4812,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   <ul className="space-y-1">
+
+
+
+
+
+
+
+
 
 
 
@@ -1662,7 +4844,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                       <li key={index} className="text-sm text-muted-foreground">
+
+
+
+
+
+
+
+
 
 
 
@@ -1678,7 +4876,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                       </li>
+
+
+
+
+
+
+
+
 
 
 
@@ -1694,7 +4908,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   </ul>
+
+
+
+
+
+
+
+
 
 
 
@@ -1710,6 +4940,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               )}
 
 
@@ -1718,7 +4956,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
             </Card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1742,7 +5004,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               <div className="flex items-center gap-2 mb-4">
+
+
+
+
+
+
+
+
 
 
 
@@ -1758,7 +5036,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 <TooltipProvider>
+
+
+
+
+
+
+
+
 
 
 
@@ -1774,7 +5068,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                     <TooltipTrigger>
+
+
+
+
+
+
+
+
 
 
 
@@ -1790,7 +5100,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                     </TooltipTrigger>
+
+
+
+
+
+
+
+
 
 
 
@@ -1806,7 +5132,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                       <p>Add tags to help categorize the extraction</p>
+
+
+
+
+
+
+
+
 
 
 
@@ -1822,7 +5164,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   </Tooltip>
+
+
+
+
+
+
+
+
 
 
 
@@ -1838,7 +5196,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1862,7 +5244,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 <Input
+
+
+
+
+
+
+
+
 
 
 
@@ -1878,7 +5276,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   value={newTag}
+
+
+
+
+
+
+
+
 
 
 
@@ -1894,7 +5308,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
+
+
+
+
+
+
+
+
 
 
 
@@ -1910,6 +5340,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 <Button onClick={handleAddTag}>Add</Button>
 
 
@@ -1918,7 +5356,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1942,7 +5404,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 <div className="flex flex-wrap gap-2 mt-4">
+
+
+
+
+
+
+
+
 
 
 
@@ -1958,7 +5436,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                     <span
+
+
+
+
+
+
+
+
 
 
 
@@ -1974,7 +5468,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                       className="px-2 py-1 bg-secondary text-secondary-foreground rounded-md text-sm flex items-center gap-1"
+
+
+
+
+
+
+
+
 
 
 
@@ -1990,7 +5500,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                       {tag}
+
+
+
+
+
+
+
+
 
 
 
@@ -2006,7 +5532,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                         onClick={() => removeTag(tag)}
+
+
+
+
+
+
+
+
 
 
 
@@ -2022,7 +5564,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                       >
+
+
+
+
+
+
+
+
 
 
 
@@ -2038,7 +5596,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                       </button>
+
+
+
+
+
+
+
+
 
 
 
@@ -2054,7 +5628,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   ))}
+
+
+
+
+
+
+
+
 
 
 
@@ -2070,7 +5660,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               )}
+
+
+
+
+
+
+
+
 
 
 
@@ -2094,7 +5700,31 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <Button
+
+
+
+
+
+
+
+
 
 
 
@@ -2110,7 +5740,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               size="lg"
+
+
+
+
+
+
+
+
 
 
 
@@ -2126,7 +5772,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               disabled={isProcessing || files.length === 0}
+
+
+
+
+
+
+
+
 
 
 
@@ -2142,7 +5804,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               {isProcessing 
+
+
+
+
+
+
+
+
 
 
 
@@ -2158,6 +5836,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 : 'Extract Text'}
 
 
@@ -2166,7 +5852,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
             </Button>
+
+
+
+
+
+
+
+
 
 
 
@@ -2190,7 +5892,30 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <Card className="p-6">
+
+
+
+
+
+
+
+
 
 
 
@@ -2206,7 +5931,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               <div className="flex items-center gap-2">
+
+
+
+
+
+
+
+
 
 
 
@@ -2222,7 +5963,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 <TooltipProvider>
+
+
+
+
+
+
+
+
 
 
 
@@ -2238,7 +5995,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                     <TooltipTrigger>
+
+
+
+
+
+
+
+
 
 
 
@@ -2254,7 +6027,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                     </TooltipTrigger>
+
+
+
+
+
+
+
+
 
 
 
@@ -2270,7 +6059,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                       <p>Extracted text will appear here</p>
+
+
+
+
+
+
+
+
 
 
 
@@ -2286,7 +6091,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   </Tooltip>
+
+
+
+
+
+
+
+
 
 
 
@@ -2302,7 +6123,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               </div>
+
+
+
+
+
+
+
+
 
 
 
@@ -2318,7 +6155,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                 <Copy className="w-4 h-4" />
+
+
+
+
+
+
+
+
 
 
 
@@ -2334,7 +6187,30 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2358,7 +6234,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               {extractedText ? (
+
+
+
+
+
+
+
+
 
 
 
@@ -2374,7 +6266,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               ) : (
+
+
+
+
+
+
+
+
 
 
 
@@ -2390,7 +6298,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
                   Upload an image to extract text
+
+
+
+
+
+
+
+
 
 
 
@@ -2406,7 +6330,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
               )}
+
+
+
+
+
+
+
+
 
 
 
@@ -2422,7 +6362,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
           </Card>
+
+
+
+
+
+
+
+
 
 
 
@@ -2438,7 +6394,23 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       </main>
+
+
+
+
+
+
+
+
 
 
 
@@ -2454,6 +6426,14 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   )
 
 
@@ -2462,7 +6442,47 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
