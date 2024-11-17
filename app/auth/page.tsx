@@ -6,7 +6,19 @@
 
 
 
+
+
+
+
+
+
+
+
 import { useState, useEffect, Suspense } from 'react'
+
+
+
+
 
 
 
@@ -14,7 +26,15 @@ import { Button } from "@/components/ui/button"
 
 
 
+
+
+
+
 import { Input } from "@/components/ui/input"
+
+
+
+
 
 
 
@@ -22,11 +42,23 @@ import { Card } from "@/components/ui/card"
 
 
 
+
+
+
+
 import { Mail } from 'lucide-react'
 
 
 
+
+
+
+
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+
+
+
+
 
 
 
@@ -38,7 +70,19 @@ import { useSearchParams } from 'next/navigation'
 
 
 
+
+
+
+
+
+
+
+
 function AuthContent() {
+
+
+
+
 
 
 
@@ -46,7 +90,15 @@ function AuthContent() {
 
 
 
+
+
+
+
   const [loading, setLoading] = useState(false)
+
+
+
+
 
 
 
@@ -54,7 +106,15 @@ function AuthContent() {
 
 
 
+
+
+
+
   const supabase = createClientComponentClient()
+
+
+
+
 
 
 
@@ -66,7 +126,19 @@ function AuthContent() {
 
 
 
+
+
+
+
+
+
+
+
   useEffect(() => {
+
+
+
+
 
 
 
@@ -74,7 +146,15 @@ function AuthContent() {
 
 
 
+
+
+
+
     if (emailParam) {
+
+
+
+
 
 
 
@@ -82,7 +162,15 @@ function AuthContent() {
 
 
 
+
+
+
+
     }
+
+
+
+
 
 
 
@@ -94,7 +182,19 @@ function AuthContent() {
 
 
 
+
+
+
+
+
+
+
+
   const handleLogin = async (e: React.FormEvent) => {
+
+
+
+
 
 
 
@@ -102,7 +202,15 @@ function AuthContent() {
 
 
 
+
+
+
+
     setLoading(true)
+
+
+
+
 
 
 
@@ -114,7 +222,19 @@ function AuthContent() {
 
 
 
+
+
+
+
+
+
+
+
     try {
+
+
+
+
 
 
 
@@ -122,7 +242,15 @@ function AuthContent() {
 
 
 
+
+
+
+
         email,
+
+
+
+
 
 
 
@@ -130,7 +258,15 @@ function AuthContent() {
 
 
 
-          emailRedirectTo: `https://datafromimages.sollvr.com/extract-data`,
+
+
+
+
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+
+
+
+
 
 
 
@@ -138,7 +274,19 @@ function AuthContent() {
 
 
 
+
+
+
+
       })
+
+
+
+
+
+
+
+
 
 
 
@@ -154,7 +302,19 @@ function AuthContent() {
 
 
 
+
+
+
+
+
+
+
+
       setMessage({
+
+
+
+
 
 
 
@@ -162,11 +322,23 @@ function AuthContent() {
 
 
 
+
+
+
+
         text: 'Check your email for the login link!'
 
 
 
+
+
+
+
       })
+
+
+
+
 
 
 
@@ -174,7 +346,15 @@ function AuthContent() {
 
 
 
+
+
+
+
       setMessage({
+
+
+
+
 
 
 
@@ -182,7 +362,15 @@ function AuthContent() {
 
 
 
+
+
+
+
         text: error instanceof Error ? error.message : 'An error occurred'
+
+
+
+
 
 
 
@@ -190,7 +378,15 @@ function AuthContent() {
 
 
 
+
+
+
+
     } finally {
+
+
+
+
 
 
 
@@ -198,7 +394,15 @@ function AuthContent() {
 
 
 
+
+
+
+
     }
+
+
+
+
 
 
 
@@ -210,7 +414,19 @@ function AuthContent() {
 
 
 
+
+
+
+
+
+
+
+
   return (
+
+
+
+
 
 
 
@@ -218,7 +434,15 @@ function AuthContent() {
 
 
 
+
+
+
+
       <Card className="w-full max-w-md space-y-8 p-8">
+
+
+
+
 
 
 
@@ -226,7 +450,15 @@ function AuthContent() {
 
 
 
+
+
+
+
           <div className="bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center mx-auto">
+
+
+
+
 
 
 
@@ -234,7 +466,15 @@ function AuthContent() {
 
 
 
+
+
+
+
           </div>
+
+
+
+
 
 
 
@@ -242,7 +482,15 @@ function AuthContent() {
 
 
 
+
+
+
+
           <p className="mt-2 text-muted-foreground">
+
+
+
+
 
 
 
@@ -250,11 +498,27 @@ function AuthContent() {
 
 
 
+
+
+
+
           </p>
 
 
 
+
+
+
+
         </div>
+
+
+
+
+
+
+
+
 
 
 
@@ -266,7 +530,15 @@ function AuthContent() {
 
 
 
+
+
+
+
           <div>
+
+
+
+
 
 
 
@@ -274,7 +546,15 @@ function AuthContent() {
 
 
 
+
+
+
+
               type="email"
+
+
+
+
 
 
 
@@ -282,7 +562,15 @@ function AuthContent() {
 
 
 
+
+
+
+
               value={email}
+
+
+
+
 
 
 
@@ -290,7 +578,15 @@ function AuthContent() {
 
 
 
+
+
+
+
               required
+
+
+
+
 
 
 
@@ -298,11 +594,27 @@ function AuthContent() {
 
 
 
+
+
+
+
             />
 
 
 
+
+
+
+
           </div>
+
+
+
+
+
+
+
+
 
 
 
@@ -314,7 +626,15 @@ function AuthContent() {
 
 
 
+
+
+
+
             type="submit"
+
+
+
+
 
 
 
@@ -322,7 +642,15 @@ function AuthContent() {
 
 
 
+
+
+
+
             disabled={loading}
+
+
+
+
 
 
 
@@ -330,7 +658,15 @@ function AuthContent() {
 
 
 
+
+
+
+
           >
+
+
+
+
 
 
 
@@ -338,7 +674,15 @@ function AuthContent() {
 
 
 
+
+
+
+
           </Button>
+
+
+
+
 
 
 
@@ -350,7 +694,19 @@ function AuthContent() {
 
 
 
+
+
+
+
+
+
+
+
         {message && (
+
+
+
+
 
 
 
@@ -358,7 +714,15 @@ function AuthContent() {
 
 
 
+
+
+
+
             message.type === 'success' 
+
+
+
+
 
 
 
@@ -366,7 +730,15 @@ function AuthContent() {
 
 
 
+
+
+
+
               : 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+
+
+
+
 
 
 
@@ -374,7 +746,15 @@ function AuthContent() {
 
 
 
+
+
+
+
             {message.text}
+
+
+
+
 
 
 
@@ -382,7 +762,15 @@ function AuthContent() {
 
 
 
+
+
+
+
         )}
+
+
+
+
 
 
 
@@ -390,7 +778,15 @@ function AuthContent() {
 
 
 
+
+
+
+
     </div>
+
+
+
+
 
 
 
@@ -398,7 +794,19 @@ function AuthContent() {
 
 
 
+
+
+
+
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -410,7 +818,15 @@ function AuthContent() {
 
 
 
+
+
+
+
 function AuthLoading() {
+
+
+
+
 
 
 
@@ -418,7 +834,15 @@ function AuthLoading() {
 
 
 
+
+
+
+
     <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
+
+
+
+
 
 
 
@@ -426,7 +850,15 @@ function AuthLoading() {
 
 
 
+
+
+
+
         <div className="text-center">
+
+
+
+
 
 
 
@@ -434,7 +866,15 @@ function AuthLoading() {
 
 
 
+
+
+
+
           <div className="mt-6 h-8 bg-primary/10 rounded animate-pulse w-32 mx-auto" />
+
+
+
+
 
 
 
@@ -442,7 +882,15 @@ function AuthLoading() {
 
 
 
+
+
+
+
         </div>
+
+
+
+
 
 
 
@@ -450,11 +898,23 @@ function AuthLoading() {
 
 
 
+
+
+
+
     </div>
 
 
 
+
+
+
+
   )
+
+
+
+
 
 
 
@@ -466,7 +926,19 @@ function AuthLoading() {
 
 
 
+
+
+
+
+
+
+
+
 export default function Auth() {
+
+
+
+
 
 
 
@@ -474,7 +946,15 @@ export default function Auth() {
 
 
 
+
+
+
+
     <Suspense fallback={<AuthLoading />}>
+
+
+
+
 
 
 
@@ -482,7 +962,15 @@ export default function Auth() {
 
 
 
+
+
+
+
     </Suspense>
+
+
+
+
 
 
 
@@ -490,7 +978,27 @@ export default function Auth() {
 
 
 
+
+
+
+
 } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
