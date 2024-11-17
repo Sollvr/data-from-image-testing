@@ -6,7 +6,19 @@
 
 
 
+
+
+
+
+
+
+
+
 import { useState, useEffect } from 'react'
+
+
+
+
 
 
 
@@ -14,7 +26,15 @@ import { Button } from "@/components/ui/button"
 
 
 
+
+
+
+
 import { Card } from "@/components/ui/card"
+
+
+
+
 
 
 
@@ -22,7 +42,15 @@ import { Input } from "@/components/ui/input"
 
 
 
+
+
+
+
 import { Textarea } from "@/components/ui/textarea"
+
+
+
+
 
 
 
@@ -30,7 +58,15 @@ import { Copy, Upload, HelpCircle, LogOut } from 'lucide-react'
 
 
 
+
+
+
+
 import { supabase } from '@/lib/supabase'
+
+
+
+
 
 
 
@@ -38,7 +74,15 @@ import { useRouter } from 'next/navigation'
 
 
 
+
+
+
+
 import {
+
+
+
+
 
 
 
@@ -46,7 +90,15 @@ import {
 
 
 
+
+
+
+
   TooltipContent,
+
+
+
+
 
 
 
@@ -54,7 +106,15 @@ import {
 
 
 
+
+
+
+
   TooltipTrigger,
+
+
+
+
 
 
 
@@ -66,7 +126,19 @@ import {
 
 
 
+
+
+
+
+
+
+
+
 type User = {
+
+
+
+
 
 
 
@@ -74,7 +146,15 @@ type User = {
 
 
 
+
+
+
+
   email?: string;
+
+
+
+
 
 
 
@@ -82,7 +162,15 @@ type User = {
 
 
 
+
+
+
+
   updated_at?: string;
+
+
+
+
 
 
 
@@ -90,7 +178,15 @@ type User = {
 
 
 
+
+
+
+
     provider?: string;
+
+
+
+
 
 
 
@@ -98,7 +194,15 @@ type User = {
 
 
 
+
+
+
+
   };
+
+
+
+
 
 
 
@@ -106,7 +210,15 @@ type User = {
 
 
 
+
+
+
+
     [key: string]: unknown;
+
+
+
+
 
 
 
@@ -114,7 +226,15 @@ type User = {
 
 
 
+
+
+
+
   aud?: string;
+
+
+
+
 
 
 
@@ -122,7 +242,15 @@ type User = {
 
 
 
+
+
+
+
   email_confirmed_at?: string;
+
+
+
+
 
 
 
@@ -130,7 +258,15 @@ type User = {
 
 
 
+
+
+
+
   confirmed_at?: string;
+
+
+
+
 
 
 
@@ -138,11 +274,27 @@ type User = {
 
 
 
+
+
+
+
   factor_id?: string;
 
 
 
+
+
+
+
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -154,7 +306,15 @@ export default function Component() {
 
 
 
+
+
+
+
   const [prompt, setPrompt] = useState('')
+
+
+
+
 
 
 
@@ -162,7 +322,15 @@ export default function Component() {
 
 
 
+
+
+
+
   const [newTag, setNewTag] = useState('')
+
+
+
+
 
 
 
@@ -170,7 +338,15 @@ export default function Component() {
 
 
 
+
+
+
+
   const [isProcessing, setIsProcessing] = useState(false)
+
+
+
+
 
 
 
@@ -178,7 +354,15 @@ export default function Component() {
 
 
 
+
+
+
+
   const router = useRouter()
+
+
+
+
 
 
 
@@ -190,7 +374,19 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   useEffect(() => {
+
+
+
+
 
 
 
@@ -198,7 +394,15 @@ export default function Component() {
 
 
 
+
+
+
+
       const { data: { user } } = await supabase.auth.getUser()
+
+
+
+
 
 
 
@@ -206,11 +410,23 @@ export default function Component() {
 
 
 
+
+
+
+
     }
 
 
 
+
+
+
+
     getUser()
+
+
+
+
 
 
 
@@ -222,7 +438,19 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   const handleSignOut = async () => {
+
+
+
+
 
 
 
@@ -230,11 +458,27 @@ export default function Component() {
 
 
 
+
+
+
+
     router.push('/auth')
 
 
 
+
+
+
+
   }
+
+
+
+
+
+
+
+
 
 
 
@@ -246,7 +490,15 @@ export default function Component() {
 
 
 
+
+
+
+
     e.preventDefault()
+
+
+
+
 
 
 
@@ -254,11 +506,27 @@ export default function Component() {
 
 
 
+
+
+
+
     setFiles(prev => [...prev, ...droppedFiles])
 
 
 
+
+
+
+
   }
+
+
+
+
+
+
+
+
 
 
 
@@ -270,7 +538,15 @@ export default function Component() {
 
 
 
+
+
+
+
     if (e.target.files) {
+
+
+
+
 
 
 
@@ -278,7 +554,15 @@ export default function Component() {
 
 
 
+
+
+
+
       setFiles(prev => [...prev, ...selectedFiles])
+
+
+
+
 
 
 
@@ -286,7 +570,19 @@ export default function Component() {
 
 
 
+
+
+
+
   }
+
+
+
+
+
+
+
+
 
 
 
@@ -298,7 +594,15 @@ export default function Component() {
 
 
 
+
+
+
+
     if (newTag && !tags.includes(newTag)) {
+
+
+
+
 
 
 
@@ -306,7 +610,15 @@ export default function Component() {
 
 
 
+
+
+
+
       setNewTag('')
+
+
+
+
 
 
 
@@ -314,7 +626,19 @@ export default function Component() {
 
 
 
+
+
+
+
   }
+
+
+
+
+
+
+
+
 
 
 
@@ -326,11 +650,27 @@ export default function Component() {
 
 
 
+
+
+
+
     setTags(tags.filter(tag => tag !== tagToRemove))
 
 
 
+
+
+
+
   }
+
+
+
+
+
+
+
+
 
 
 
@@ -342,7 +682,15 @@ export default function Component() {
 
 
 
+
+
+
+
     setIsProcessing(true)
+
+
+
+
 
 
 
@@ -350,7 +698,15 @@ export default function Component() {
 
 
 
+
+
+
+
       const base64Images = await Promise.all(
+
+
+
+
 
 
 
@@ -358,7 +714,15 @@ export default function Component() {
 
 
 
+
+
+
+
           return new Promise<string>((resolve, reject) => {
+
+
+
+
 
 
 
@@ -366,7 +730,15 @@ export default function Component() {
 
 
 
+
+
+
+
             reader.onload = e => {
+
+
+
+
 
 
 
@@ -374,7 +746,15 @@ export default function Component() {
 
 
 
+
+
+
+
               resolve(result)
+
+
+
+
 
 
 
@@ -382,7 +762,15 @@ export default function Component() {
 
 
 
+
+
+
+
             reader.onerror = error => reject(error)
+
+
+
+
 
 
 
@@ -390,11 +778,23 @@ export default function Component() {
 
 
 
+
+
+
+
           })
 
 
 
+
+
+
+
         })
+
+
+
+
 
 
 
@@ -406,7 +806,19 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       const response = await fetch('/api/extract-text', {
+
+
+
+
 
 
 
@@ -414,7 +826,15 @@ export default function Component() {
 
 
 
+
+
+
+
         headers: {
+
+
+
+
 
 
 
@@ -422,7 +842,15 @@ export default function Component() {
 
 
 
+
+
+
+
         },
+
+
+
+
 
 
 
@@ -430,7 +858,15 @@ export default function Component() {
 
 
 
+
+
+
+
           base64Images,
+
+
+
+
 
 
 
@@ -438,7 +874,15 @@ export default function Component() {
 
 
 
+
+
+
+
         })
+
+
+
+
 
 
 
@@ -450,7 +894,19 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       const data = await response.json()
+
+
+
+
 
 
 
@@ -462,7 +918,19 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
       if (data.extractedText && user) {
+
+
+
+
 
 
 
@@ -470,7 +938,15 @@ export default function Component() {
 
 
 
+
+
+
+
           await supabase
+
+
+
+
 
 
 
@@ -478,7 +954,15 @@ export default function Component() {
 
 
 
+
+
+
+
             .insert({
+
+
+
+
 
 
 
@@ -486,7 +970,15 @@ export default function Component() {
 
 
 
+
+
+
+
               filename: file.name,
+
+
+
+
 
 
 
@@ -494,7 +986,15 @@ export default function Component() {
 
 
 
+
+
+
+
               requirements: prompt,
+
+
+
+
 
 
 
@@ -502,7 +1002,15 @@ export default function Component() {
 
 
 
+
+
+
+
             })
+
+
+
+
 
 
 
@@ -510,7 +1018,15 @@ export default function Component() {
 
 
 
+
+
+
+
       }
+
+
+
+
 
 
 
@@ -518,7 +1034,15 @@ export default function Component() {
 
 
 
+
+
+
+
       console.error('Error processing images:', error)
+
+
+
+
 
 
 
@@ -526,11 +1050,23 @@ export default function Component() {
 
 
 
+
+
+
+
       setIsProcessing(false)
 
 
 
+
+
+
+
     }
+
+
+
+
 
 
 
@@ -542,7 +1078,19 @@ export default function Component() {
 
 
 
+
+
+
+
+
+
+
+
   return (
+
+
+
+
 
 
 
@@ -550,7 +1098,15 @@ export default function Component() {
 
 
 
+
+
+
+
       <header className="border-b">
+
+
+
+
 
 
 
@@ -558,479 +1114,55 @@ export default function Component() {
 
 
 
-          <h1 className="text-2xl font-bold">Extract Text</h1>
 
 
 
-          <nav className="flex items-center gap-4">
 
+          <div className="flex items-center gap-4">
 
 
-            <Button variant="ghost" size="icon" onClick={handleSignOut}>
 
 
 
-              <LogOut className="w-5 h-5" />
 
 
+            <h1 className="text-2xl font-bold">Extract Text</h1>
 
-            </Button>
 
 
 
-          </nav>
 
 
 
-        </div>
+            <Button 
 
 
 
-      </header>
 
 
 
 
+              variant="ghost" 
 
 
 
-      <main className="container py-6">
 
 
 
-        <div className="grid gap-6 lg:grid-cols-2">
 
+              className="flex items-center gap-2 text-muted-foreground hover:text-destructive"
 
 
-          <div className="space-y-6">
 
 
 
-            <Card className="p-6">
 
 
+              onClick={handleSignOut}
 
-              <div className="flex items-center gap-2 mb-4">
 
 
 
-                <h2 className="text-lg font-semibold">Upload Images</h2>
-
-
-
-                <TooltipProvider>
-
-
-
-                  <Tooltip>
-
-
-
-                    <TooltipTrigger>
-
-
-
-                      <HelpCircle className="w-4 h-4 text-muted-foreground" />
-
-
-
-                    </TooltipTrigger>
-
-
-
-                    <TooltipContent>
-
-
-
-                      <p>Upload images to extract text from</p>
-
-
-
-                    </TooltipContent>
-
-
-
-                  </Tooltip>
-
-
-
-                </TooltipProvider>
-
-
-
-              </div>
-
-
-
-
-
-
-
-              <Textarea
-
-
-
-                placeholder="Specify what information you want to extract from the images (e.g., 'Extract all dates and amounts from these receipts')"
-
-
-
-                value={prompt}
-
-
-
-                onChange={(e) => setPrompt(e.target.value)}
-
-
-
-                className="mb-4"
-
-
-
-              />
-
-
-
-
-
-
-
-              <div
-
-
-
-                className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer"
-
-
-
-                onDrop={handleDrop}
-
-
-
-                onDragOver={(e) => e.preventDefault()}
-
-
-
-                onClick={() => document.getElementById('file-input')?.click()}
-
-
-
-              >
-
-
-
-                <Upload className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
-
-
-
-                <p className="text-lg font-medium">Drop your images here or click to upload</p>
-
-
-
-                <p className="text-sm text-muted-foreground mt-1">
-
-
-
-                  Supports multiple files: PNG, JPG, JPEG, GIF
-
-
-
-                </p>
-
-
-
-                <input
-
-
-
-                  id="file-input"
-
-
-
-                  type="file"
-
-
-
-                  multiple
-
-
-
-                  accept="image/*"
-
-
-
-                  className="hidden"
-
-
-
-                  onChange={handleFileInput}
-
-
-
-                />
-
-
-
-              </div>
-
-
-
-
-
-
-
-              {files.length > 0 && (
-
-
-
-                <div className="mt-4">
-
-
-
-                  <p className="font-medium mb-2">Selected files:</p>
-
-
-
-                  <ul className="space-y-1">
-
-
-
-                    {files.map((file, index) => (
-
-
-
-                      <li key={index} className="text-sm text-muted-foreground">
-
-
-
-                        {file.name}
-
-
-
-                      </li>
-
-
-
-                    ))}
-
-
-
-                  </ul>
-
-
-
-                </div>
-
-
-
-              )}
-
-
-
-            </Card>
-
-
-
-
-
-
-
-            <Card className="p-6">
-
-
-
-              <div className="flex items-center gap-2 mb-4">
-
-
-
-                <h2 className="text-lg font-semibold">Tags</h2>
-
-
-
-                <TooltipProvider>
-
-
-
-                  <Tooltip>
-
-
-
-                    <TooltipTrigger>
-
-
-
-                      <HelpCircle className="w-4 h-4 text-muted-foreground" />
-
-
-
-                    </TooltipTrigger>
-
-
-
-                    <TooltipContent>
-
-
-
-                      <p>Add tags to help categorize the extraction</p>
-
-
-
-                    </TooltipContent>
-
-
-
-                  </Tooltip>
-
-
-
-                </TooltipProvider>
-
-
-
-              </div>
-
-
-
-
-
-
-
-              <div className="flex gap-2">
-
-
-
-                <Input
-
-
-
-                  placeholder="Add a tag..."
-
-
-
-                  value={newTag}
-
-
-
-                  onChange={(e) => setNewTag(e.target.value)}
-
-
-
-                  onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
-
-
-
-                />
-
-
-
-                <Button onClick={handleAddTag}>Add</Button>
-
-
-
-              </div>
-
-
-
-
-
-
-
-              {tags.length > 0 && (
-
-
-
-                <div className="flex flex-wrap gap-2 mt-4">
-
-
-
-                  {tags.map(tag => (
-
-
-
-                    <span
-
-
-
-                      key={tag}
-
-
-
-                      className="px-2 py-1 bg-secondary text-secondary-foreground rounded-md text-sm flex items-center gap-1"
-
-
-
-                    >
-
-
-
-                      {tag}
-
-
-
-                      <button
-
-
-
-                        onClick={() => removeTag(tag)}
-
-
-
-                        className="hover:text-destructive"
-
-
-
-                      >
-
-
-
-                        ×
-
-
-
-                      </button>
-
-
-
-                    </span>
-
-
-
-                  ))}
-
-
-
-                </div>
-
-
-
-              )}
-
-
-
-            </Card>
-
-
-
-
-
-
-
-            <Button
-
-
-
-              className="w-full"
-
-
-
-              size="lg"
-
-
-
-              onClick={processImages}
-
-
-
-              disabled={isProcessing || files.length === 0}
 
 
 
@@ -1038,19 +1170,31 @@ export default function Component() {
 
 
 
-              {isProcessing 
 
 
 
-                ? `Processing ${files.length} image${files.length > 1 ? 's' : ''}...` 
+
+              <LogOut className="w-4 h-4" />
 
 
 
-                : 'Extract Text'}
+
+
+
+
+              <span>Logout</span>
+
+
+
+
 
 
 
             </Button>
+
+
+
+
 
 
 
@@ -1062,19 +1206,99 @@ export default function Component() {
 
 
 
-          <Card className="p-6">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
 
 
 
-            <div className="flex items-center justify-between mb-4">
 
 
 
-              <div className="flex items-center gap-2">
+
+            {user?.email}
 
 
 
-                <h2 className="text-lg font-semibold">Extracted Content</h2>
+
+
+
+
+          </div>
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+      </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <main className="container py-6">
+
+
+
+
+
+
+
+        <div className="grid gap-6 lg:grid-cols-2">
+
+
+
+
+
+
+
+          <div className="space-y-6">
+
+
+
+
+
+
+
+            <Card className="p-6">
+
+
+
+
+
+
+
+              <div className="flex items-center gap-2 mb-4">
+
+
+
+
+
+
+
+                <h2 className="text-lg font-semibold">Upload Images</h2>
+
+
+
+
 
 
 
@@ -1082,7 +1306,15 @@ export default function Component() {
 
 
 
+
+
+
+
                   <Tooltip>
+
+
+
+
 
 
 
@@ -1090,7 +1322,15 @@ export default function Component() {
 
 
 
+
+
+
+
                       <HelpCircle className="w-4 h-4 text-muted-foreground" />
+
+
+
+
 
 
 
@@ -1098,11 +1338,23 @@ export default function Component() {
 
 
 
+
+
+
+
                     <TooltipContent>
 
 
 
-                      <p>Extracted text will appear here</p>
+
+
+
+
+                      <p>Upload images to extract text from</p>
+
+
+
+
 
 
 
@@ -1110,7 +1362,15 @@ export default function Component() {
 
 
 
+
+
+
+
                   </Tooltip>
+
+
+
+
 
 
 
@@ -1118,7 +1378,935 @@ export default function Component() {
 
 
 
+
+
+
+
               </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <Textarea
+
+
+
+
+
+
+
+                placeholder="Specify what information you want to extract from the images (e.g., 'Extract all dates and amounts from these receipts')"
+
+
+
+
+
+
+
+                value={prompt}
+
+
+
+
+
+
+
+                onChange={(e) => setPrompt(e.target.value)}
+
+
+
+
+
+
+
+                className="mb-4"
+
+
+
+
+
+
+
+              />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <div
+
+
+
+
+
+
+
+                className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer"
+
+
+
+
+
+
+
+                onDrop={handleDrop}
+
+
+
+
+
+
+
+                onDragOver={(e) => e.preventDefault()}
+
+
+
+
+
+
+
+                onClick={() => document.getElementById('file-input')?.click()}
+
+
+
+
+
+
+
+              >
+
+
+
+
+
+
+
+                <Upload className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
+
+
+
+
+
+
+
+                <p className="text-lg font-medium">Drop your images here or click to upload</p>
+
+
+
+
+
+
+
+                <p className="text-sm text-muted-foreground mt-1">
+
+
+
+
+
+
+
+                  Supports multiple files: PNG, JPG, JPEG, GIF
+
+
+
+
+
+
+
+                </p>
+
+
+
+
+
+
+
+                <input
+
+
+
+
+
+
+
+                  id="file-input"
+
+
+
+
+
+
+
+                  type="file"
+
+
+
+
+
+
+
+                  multiple
+
+
+
+
+
+
+
+                  accept="image/*"
+
+
+
+
+
+
+
+                  className="hidden"
+
+
+
+
+
+
+
+                  onChange={handleFileInput}
+
+
+
+
+
+
+
+                />
+
+
+
+
+
+
+
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              {files.length > 0 && (
+
+
+
+
+
+
+
+                <div className="mt-4">
+
+
+
+
+
+
+
+                  <p className="font-medium mb-2">Selected files:</p>
+
+
+
+
+
+
+
+                  <ul className="space-y-1">
+
+
+
+
+
+
+
+                    {files.map((file, index) => (
+
+
+
+
+
+
+
+                      <li key={index} className="text-sm text-muted-foreground">
+
+
+
+
+
+
+
+                        {file.name}
+
+
+
+
+
+
+
+                      </li>
+
+
+
+
+
+
+
+                    ))}
+
+
+
+
+
+
+
+                  </ul>
+
+
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+              )}
+
+
+
+
+
+
+
+            </Card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <Card className="p-6">
+
+
+
+
+
+
+
+              <div className="flex items-center gap-2 mb-4">
+
+
+
+
+
+
+
+                <h2 className="text-lg font-semibold">Tags</h2>
+
+
+
+
+
+
+
+                <TooltipProvider>
+
+
+
+
+
+
+
+                  <Tooltip>
+
+
+
+
+
+
+
+                    <TooltipTrigger>
+
+
+
+
+
+
+
+                      <HelpCircle className="w-4 h-4 text-muted-foreground" />
+
+
+
+
+
+
+
+                    </TooltipTrigger>
+
+
+
+
+
+
+
+                    <TooltipContent>
+
+
+
+
+
+
+
+                      <p>Add tags to help categorize the extraction</p>
+
+
+
+
+
+
+
+                    </TooltipContent>
+
+
+
+
+
+
+
+                  </Tooltip>
+
+
+
+
+
+
+
+                </TooltipProvider>
+
+
+
+
+
+
+
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <div className="flex gap-2">
+
+
+
+
+
+
+
+                <Input
+
+
+
+
+
+
+
+                  placeholder="Add a tag..."
+
+
+
+
+
+
+
+                  value={newTag}
+
+
+
+
+
+
+
+                  onChange={(e) => setNewTag(e.target.value)}
+
+
+
+
+
+
+
+                  onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
+
+
+
+
+
+
+
+                />
+
+
+
+
+
+
+
+                <Button onClick={handleAddTag}>Add</Button>
+
+
+
+
+
+
+
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              {tags.length > 0 && (
+
+
+
+
+
+
+
+                <div className="flex flex-wrap gap-2 mt-4">
+
+
+
+
+
+
+
+                  {tags.map(tag => (
+
+
+
+
+
+
+
+                    <span
+
+
+
+
+
+
+
+                      key={tag}
+
+
+
+
+
+
+
+                      className="px-2 py-1 bg-secondary text-secondary-foreground rounded-md text-sm flex items-center gap-1"
+
+
+
+
+
+
+
+                    >
+
+
+
+
+
+
+
+                      {tag}
+
+
+
+
+
+
+
+                      <button
+
+
+
+
+
+
+
+                        onClick={() => removeTag(tag)}
+
+
+
+
+
+
+
+                        className="hover:text-destructive"
+
+
+
+
+
+
+
+                      >
+
+
+
+
+
+
+
+                        ×
+
+
+
+
+
+
+
+                      </button>
+
+
+
+
+
+
+
+                    </span>
+
+
+
+
+
+
+
+                  ))}
+
+
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+              )}
+
+
+
+
+
+
+
+            </Card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <Button
+
+
+
+
+
+
+
+              className="w-full"
+
+
+
+
+
+
+
+              size="lg"
+
+
+
+
+
+
+
+              onClick={processImages}
+
+
+
+
+
+
+
+              disabled={isProcessing || files.length === 0}
+
+
+
+
+
+
+
+            >
+
+
+
+
+
+
+
+              {isProcessing 
+
+
+
+
+
+
+
+                ? `Processing ${files.length} image${files.length > 1 ? 's' : ''}...` 
+
+
+
+
+
+
+
+                : 'Extract Text'}
+
+
+
+
+
+
+
+            </Button>
+
+
+
+
+
+
+
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <Card className="p-6">
+
+
+
+
+
+
+
+            <div className="flex items-center justify-between mb-4">
+
+
+
+
+
+
+
+              <div className="flex items-center gap-2">
+
+
+
+
+
+
+
+                <h2 className="text-lg font-semibold">Extracted Content</h2>
+
+
+
+
+
+
+
+                <TooltipProvider>
+
+
+
+
+
+
+
+                  <Tooltip>
+
+
+
+
+
+
+
+                    <TooltipTrigger>
+
+
+
+
+
+
+
+                      <HelpCircle className="w-4 h-4 text-muted-foreground" />
+
+
+
+
+
+
+
+                    </TooltipTrigger>
+
+
+
+
+
+
+
+                    <TooltipContent>
+
+
+
+
+
+
+
+                      <p>Extracted text will appear here</p>
+
+
+
+
+
+
+
+                    </TooltipContent>
+
+
+
+
+
+
+
+                  </Tooltip>
+
+
+
+
+
+
+
+                </TooltipProvider>
+
+
+
+
+
+
+
+              </div>
+
+
+
+
 
 
 
@@ -1126,7 +2314,15 @@ export default function Component() {
 
 
 
+
+
+
+
                 <Copy className="w-4 h-4" />
+
+
+
+
 
 
 
@@ -1134,7 +2330,19 @@ export default function Component() {
 
 
 
+
+
+
+
             </div>
+
+
+
+
+
+
+
+
 
 
 
@@ -1146,7 +2354,15 @@ export default function Component() {
 
 
 
+
+
+
+
               {extractedText ? (
+
+
+
+
 
 
 
@@ -1154,7 +2370,15 @@ export default function Component() {
 
 
 
+
+
+
+
               ) : (
+
+
+
+
 
 
 
@@ -1162,7 +2386,15 @@ export default function Component() {
 
 
 
+
+
+
+
                   Upload an image to extract text
+
+
+
+
 
 
 
@@ -1170,7 +2402,15 @@ export default function Component() {
 
 
 
+
+
+
+
               )}
+
+
+
+
 
 
 
@@ -1178,7 +2418,15 @@ export default function Component() {
 
 
 
+
+
+
+
           </Card>
+
+
+
+
 
 
 
@@ -1186,7 +2434,15 @@ export default function Component() {
 
 
 
+
+
+
+
       </main>
+
+
+
+
 
 
 
@@ -1194,11 +2450,35 @@ export default function Component() {
 
 
 
+
+
+
+
   )
 
 
 
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
