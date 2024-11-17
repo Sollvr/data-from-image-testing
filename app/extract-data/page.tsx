@@ -14,8 +14,6 @@ import { Textarea } from "@/components/ui/textarea"
 
 import { Copy, Upload, HelpCircle, LogOut, Download } from 'lucide-react'
 
-import { useRouter } from 'next/navigation'
-
 import {
 
   Tooltip,
@@ -90,8 +88,6 @@ export default function Component() {
 
   const [files, setFiles] = useState<File[]>([])
 
-  const router = useRouter()
-
   const [user, setUser] = useState<User | null>(null)
 
   const [showReviewModal, setShowReviewModal] = useState(false)
@@ -112,7 +108,7 @@ export default function Component() {
 
     getUser()
 
-  }, [])
+  }, [supabase.auth])
 
 
 
