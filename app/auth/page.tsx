@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
@@ -8,7 +8,7 @@ import { Mail } from 'lucide-react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useSearchParams } from 'next/navigation'
 
-export default function Auth() {
+function AuthContent() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{type: 'success' | 'error', text: string} | null>(null)
@@ -98,5 +98,30 @@ export default function Auth() {
       </Card>
     </div>
   )
+}
+
+// Loading component for Suspense fallback
+function AuthLoading() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
+      <Card className="w-full max-w-md p-8">
+        <div className="text-center">
+          <div className="animate-pulse bg-primary/10 w-12 h-12 rounded-full mx-auto" />
+          <div className="mt-6 h-8 bg-primary/10 rounded animate-pulse w-32 mx-auto" />
+          <div className="mt-2 h-4 bg-primary/10 rounded animate-pulse w-48 mx-auto" />
+        </div>
+      </Card>
+    </div>
+  )
+}
+
+export default function Auth() {
+  return (
+    <Suspense fallback={<AuthLoading />}>
+      <AuthContent />
+    </Suspense>
+  )
 } 
+
+
 
