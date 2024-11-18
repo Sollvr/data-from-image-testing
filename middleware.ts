@@ -22,9 +22,9 @@ export async function middleware(req: NextRequest) {
 
 
 
-  // Handle auth callback
+  // Allow auth callback URLs
 
-  if (req.nextUrl.pathname === '/auth/callback') {
+  if (req.nextUrl.pathname.startsWith('/auth/callback')) {
 
     return res
 
