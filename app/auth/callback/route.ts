@@ -3,16 +3,32 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
-  const requestUrl = new URL(request.url)
-  const code = requestUrl.searchParams.get('code')
+  try {
+    const requestUrl = new URL(request.url)
+    const code = requestUrl.searchParams.get('code')
+    
+    if (code) {
+      const cookieStore = cookies()
+      const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+      
+      // Exchange code for session
+      const { error } = await supabase.auth.exchangeCodeForSession(code)
+      
+      if (error) {
+        console.error('Auth error:', error)
+        return NextResponse.redirect(new URL('/auth', request.url))
+      }
 
-  if (code) {
-    const supabase = createRouteHandlerClient({ cookies })
-    await supabase.auth.exchangeCodeForSession(code)
+      // Force redirect to extract-data
+      return NextResponse.redirect(new URL('/extract-data', 'https://datafromimage.sollvr.com'))
+    }
+
+    // If no code, redirect to auth
+    return NextResponse.redirect(new URL('/auth', request.url))
+  } catch (error) {
+    console.error('Callback error:', error)
+    return NextResponse.redirect(new URL('/auth', request.url))
   }
-
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(new URL('/extract-data', request.url))
 }
 
 export const dynamic = 'force-dynamic' 

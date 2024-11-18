@@ -6,30 +6,35 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   const supabase = createMiddlewareClient({ req, res })
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  // Refresh session if it exists
+  const { data: { session }, error } = await supabase.auth.getSession()
 
-  // Handle auth callback
-  if (req.nextUrl.pathname === '/auth/callback') {
+  // Special case for callback
+  if (req.nextUrl.pathname.startsWith('/auth/callback')) {
     return res
   }
 
-  // Protect routes
-  if (!session && req.nextUrl.pathname !== '/auth') {
-    return NextResponse.redirect(new URL('/auth', req.url))
+  // Force redirect to extract-data if authenticated
+  if (session && req.nextUrl.pathname === '/auth') {
+    const redirectUrl = new URL('/extract-data', req.url)
+    return NextResponse.redirect(redirectUrl)
   }
 
-  // Redirect from auth page if already logged in
-  if (session && req.nextUrl.pathname === '/auth') {
-    return NextResponse.redirect(new URL('/extract-data', req.url))
+  // Force redirect to auth if not authenticated
+  if (!session && req.nextUrl.pathname !== '/auth') {
+    const redirectUrl = new URL('/auth', req.url)
+    return NextResponse.redirect(redirectUrl)
   }
 
   return res
 }
 
 export const config = {
-  matcher: ['/extract-data', '/auth', '/auth/callback'],
+  matcher: [
+    '/extract-data',
+    '/auth',
+    '/auth/callback'
+  ]
 } 
 
 
