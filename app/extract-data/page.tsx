@@ -92,6 +92,10 @@ export default function Component() {
 
   const [showReviewModal, setShowReviewModal] = useState(false)
 
+  const [credits, setCredits] = useState(0)
+
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
   const supabase = createClientComponentClient()
 
 
@@ -109,6 +113,42 @@ export default function Component() {
     getUser()
 
   }, [supabase.auth])
+
+
+
+  useEffect(() => {
+
+    const fetchCredits = async () => {
+
+      if (user?.id) {
+
+        const { data, error } = await supabase
+
+          .from('users')
+
+          .select('credits')
+
+          .eq('id', user.id)
+
+          .single()
+
+
+
+        if (data) {
+
+          setCredits(data.credits)
+
+        }
+
+      }
+
+    }
+
+
+
+    fetchCredits()
+
+  }, [user?.id])
 
 
 
@@ -192,9 +232,43 @@ export default function Component() {
 
   const processImages = async () => {
 
+    if (!user) return;
+
+
+
+    if (credits <= 0) {
+
+      setMessage({
+
+        type: 'error',
+
+        text: 'Please purchase more credits to continue'
+
+      })
+
+      return
+
+    }
+
+
+
     setIsProcessing(true)
 
     try {
+
+      const { error: creditError } = await supabase
+
+        .from('users')
+
+        .update({ credits: credits - 1 })
+
+        .eq('id', user.id)
+
+
+
+      if (creditError) throw creditError
+
+
 
       const base64Images = await Promise.all(
 
@@ -289,6 +363,32 @@ export default function Component() {
     } catch (error) {
 
       console.error('Error processing images:', error)
+
+      setMessage({
+
+        type: 'error',
+
+        text: 'Failed to process images'
+
+      })
+
+      
+
+      const { error: refundError } = await supabase
+
+        .from('users')
+
+        .update({ credits: credits })
+
+        .eq('id', user.id)
+
+      
+
+      if (!refundError) {
+
+        setCredits(prev => prev + 1)
+
+      }
 
     } finally {
 
@@ -867,7 +967,6 @@ export default function Component() {
   )
 
 }
-
 
 
 
