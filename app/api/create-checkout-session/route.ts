@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -39,7 +38,8 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ sessionId: session.id });
-  } catch (err) {
+  } catch (error) {
+    console.error('Stripe error:', error);
     return NextResponse.json({ error: 'Error creating checkout session' }, { status: 500 });
   }
 }

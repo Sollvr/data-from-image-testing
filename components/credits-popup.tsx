@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { loadStripe } from '@stripe/stripe-js'
@@ -35,14 +35,7 @@ export function CreditsPopup({ user }: CreditsPopupProps) {
   const [loading, setLoading] = useState(false)
   const supabase = createClientComponentClient()
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchCredits()
-      fetchTransactions()
-    }
-  }, [user?.id])
-
-  const fetchCredits = async () => {
+  const fetchCredits = useCallback(async () => {
     const { data, error } = await supabase
       .from('users')
       .select('credits')
@@ -57,9 +50,9 @@ export function CreditsPopup({ user }: CreditsPopupProps) {
     if (data) {
       setCredits(data.credits)
     }
-  }
+  }, [supabase, user.id])
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
@@ -75,7 +68,14 @@ export function CreditsPopup({ user }: CreditsPopupProps) {
     if (data) {
       setTransactions(data)
     }
-  }
+  }, [supabase, user.id])
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchCredits()
+      fetchTransactions()
+    }
+  }, [user?.id, fetchCredits, fetchTransactions])
 
   const handlePurchase = async (priceId: keyof typeof PRICE_OPTIONS) => {
     setLoading(true)

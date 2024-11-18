@@ -112,7 +112,7 @@ export default function Component() {
 
     getUser()
 
-  }, [supabase.auth])
+  }, [supabase])
 
 
 
@@ -134,6 +134,24 @@ export default function Component() {
 
 
 
+        if (error) {
+
+          console.error('Error fetching credits:', error)
+
+          setMessage({
+
+            type: 'error',
+
+            text: 'Failed to fetch credits'
+
+          })
+
+          return
+
+        }
+
+
+
         if (data) {
 
           setCredits(data.credits)
@@ -148,7 +166,7 @@ export default function Component() {
 
     fetchCredits()
 
-  }, [user?.id])
+  }, [user?.id, supabase])
 
 
 
@@ -673,6 +691,24 @@ export default function Component() {
       </header>
 
       <main className="container py-6">
+
+        {message && (
+
+          <div className={`mb-4 p-4 rounded-md ${
+
+            message.type === 'success' 
+
+              ? 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400' 
+
+              : 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+
+          }`}>
+
+            {message.text}
+
+          </div>
+
+        )}
 
         <div className="grid gap-6 lg:grid-cols-2">
 
