@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Copy, Upload, HelpCircle, LogOut } from 'lucide-react'
+import { Copy, Upload, HelpCircle, LogOut, Coins } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -49,6 +49,7 @@ export default function Component() {
   const [credits, setCredits] = useState(0)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const supabase = createClientComponentClient()
+  const [showCredits, setShowCredits] = useState(false)
 
   useEffect(() => {
     const getUser = async () => {
@@ -239,10 +240,33 @@ export default function Component() {
             </Button>
           </div>
           <div className="flex items-center gap-4">
-            {user && <CreditsPopup user={user} />}
+            <Button
+              variant="outline"
+              onClick={() => setShowCredits(true)}
+              className="flex items-center gap-2"
+            >
+              <Coins className="w-4 h-4" />
+              Account Info
+            </Button>
             <div className="text-sm text-muted-foreground">
               {user?.email}
             </div>
+            
+            {showCredits && (
+              <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div className="relative">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-2 top-2"
+                    onClick={() => setShowCredits(false)}
+                  >
+                    ×
+                  </Button>
+                  {user && <CreditsPopup user={user} />}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </header>
