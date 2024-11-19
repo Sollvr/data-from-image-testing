@@ -88,7 +88,9 @@ export function CreditsPopup({ user }: CreditsPopupProps) {
   }, [user?.id, fetchCredits, fetchTransactions])
 
   const handlePurchase = (paymentLink: string) => {
-    window.location.href = `${paymentLink}?client_reference_id=${user.id}`
+    const encodedUserId = encodeURIComponent(user.id)
+    const urlWithParams = `${paymentLink}?prefilled_email=${encodeURIComponent(user.email || '')}&client_reference_id=${encodedUserId}`
+    window.location.href = urlWithParams
   }
 
   return (
