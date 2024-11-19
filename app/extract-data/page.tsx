@@ -138,12 +138,17 @@ export default function Component() {
 
     setIsProcessing(true)
     try {
+      setCredits(prev => prev - 1)
+
       const { error: creditError } = await supabase
         .from('profiles')
         .update({ credits: credits - 1 })
         .eq('id', user.id)
 
-      if (creditError) throw creditError
+      if (creditError) {
+        setCredits(prev => prev + 1)
+        throw creditError
+      }
 
       const base64Images = await Promise.all(
         files.map(file => {

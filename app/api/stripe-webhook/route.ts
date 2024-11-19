@@ -53,10 +53,17 @@ export async function POST(req: Request) {
     // Handle successful checkout
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session
-      const clientReferenceId = session.client_reference_id // This is our user ID
+      const clientReferenceId = session.client_reference_id
 
-      if (!clientReferenceId) {
-        throw new Error('Missing client_reference_id')
+      // Validate user exists
+      const { data: user, error: userError } = await supabaseAdmin
+        .from('profiles')
+        .select('id')
+        .eq('id', clientReferenceId)
+        .single()
+
+      if (userError || !user) {
+        throw new Error('Invalid user ID')
       }
 
       // Update user credits
