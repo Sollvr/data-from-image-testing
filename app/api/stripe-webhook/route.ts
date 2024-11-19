@@ -53,26 +53,30 @@ export async function POST(req: Request) {
     // Handle successful checkout
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session
-      const clientReferenceId = session.client_reference_id
+      const customerEmail = session.customer_details?.email
 
-      // Validate user exists
+      if (!customerEmail) {
+        throw new Error('No customer email provided')
+      }
+
+      // Find user by email
       const { data: user, error: userError } = await supabaseAdmin
         .from('profiles')
         .select('id')
-        .eq('id', clientReferenceId)
+        .eq('email', customerEmail)
         .single()
 
       if (userError || !user) {
-        throw new Error('Invalid user ID')
+        throw new Error('User not found')
       }
 
       // Update user credits
       const { error: creditError } = await supabaseAdmin
-        .from('users')
+        .from('profiles')
         .update({ 
           credits: `credits + ${session.metadata?.credits || 0}`
         })
-        .eq('id', clientReferenceId)
+        .eq('id', user.id)
 
       if (creditError) throw creditError
 
@@ -80,16 +84,15 @@ export async function POST(req: Request) {
       const { error: transactionError } = await supabaseAdmin
         .from('transactions')
         .insert({
-          user_id: clientReferenceId,
+          user_id: user.id,
           amount: session.amount_total,
           credits: parseInt(session.metadata?.credits || '0'),
-          stripe_payment_id: session.payment_intent,
-          created_at: new Date().toISOString()
+          stripe_payment_id: session.payment_intent
         })
 
       if (transactionError) throw transactionError
 
-      console.log('Successfully processed payment for user:', clientReferenceId)
+      console.log('Successfully processed payment for user:', user.id)
     }
 
     return NextResponse.json({ 
