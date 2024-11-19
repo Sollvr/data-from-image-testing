@@ -15,10 +15,7 @@ if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
   throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL')
 }
 
-// Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-
-// Initialize Supabase with error handling
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -32,37 +29,43 @@ const supabaseAdmin = createClient(
 
 export async function POST(req: Request) {
   const body = await req.text()
-  const headersList = await headers()
-  const signature = headersList.get('stripe-signature') ?? ''
-
-  if (!signature || !process.env.STRIPE_WEBHOOK_SECRET) {
-    return NextResponse.json(
-      { error: 'Missing signature or webhook secret' },
-      { status: 400 }
-    )
-  }
-
+  const signature = (await headers()).get('stripe-signature') ?? ''
+  
   try {
     const event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET
+      process.env.STRIPE_WEBHOOK_SECRET!
     )
 
+    const payload = JSON.parse(body)
+    console.log('Webhook event type:', event.type)
+    console.log('Payment details:', {
+      email: payload?.data?.object?.billing_details?.email,
+      amount: payload?.data?.object?.amount,
+      created: new Date(payload?.created * 1000).toISOString(),
+      paymentType: payload?.type,
+      receiptEmail: payload?.data?.object?.receipt_email,
+      receiptUrl: payload?.data?.object?.receipt_url,
+      currency: payload?.data?.object?.currency
+    })
+
+    // Handle successful checkout
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session
+      const clientReferenceId = session.client_reference_id // This is our user ID
 
-      if (!session?.metadata?.userId || !session?.metadata?.credits) {
-        throw new Error('Missing metadata')
+      if (!clientReferenceId) {
+        throw new Error('Missing client_reference_id')
       }
 
       // Update user credits
       const { error: creditError } = await supabaseAdmin
         .from('users')
         .update({ 
-          credits: `credits + ${parseInt(session.metadata.credits)}`
+          credits: `credits + ${session.metadata?.credits || 0}`
         })
-        .eq('id', session.metadata.userId)
+        .eq('id', clientReferenceId)
 
       if (creditError) throw creditError
 
@@ -70,20 +73,31 @@ export async function POST(req: Request) {
       const { error: transactionError } = await supabaseAdmin
         .from('transactions')
         .insert({
-          user_id: session.metadata.userId,
+          user_id: clientReferenceId,
           amount: session.amount_total,
-          credits: parseInt(session.metadata.credits),
-          stripe_payment_id: session.payment_intent
+          credits: parseInt(session.metadata?.credits || '0'),
+          stripe_payment_id: session.payment_intent,
+          created_at: new Date().toISOString()
         })
 
       if (transactionError) throw transactionError
+
+      console.log('Successfully processed payment for user:', clientReferenceId)
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ 
+      status: 'success', 
+      event: event.type,
+      timestamp: new Date().toISOString()
+    })
   } catch (error) {
     console.error('Webhook error:', error)
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Unknown error' },
+      { 
+        status: 'failed',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      }, 
       { status: 400 }
     )
   }

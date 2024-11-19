@@ -31,7 +31,7 @@ function AuthContent() {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: 'https://datafromimage.sollvr.com/extract-data',
+          emailRedirectTo: 'https://datafromimage.sollvr.com/auth/callback',
         },
       })
 

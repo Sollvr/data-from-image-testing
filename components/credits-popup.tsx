@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { loadStripe } from '@stripe/stripe-js'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Coins, Clock } from 'lucide-react'
 
@@ -24,13 +23,25 @@ interface CreditsPopupProps {
 }
 
 const PRICE_OPTIONS = {
-  'price_100': { amount: 10, credits: 100 },
-  'price_40': { amount: 5, credits: 40 },
-  'price_15': { amount: 3, credits: 15 }
+  'price_100': { 
+    amount: 10, 
+    credits: 100,
+    paymentLink: 'your_stripe_payment_link_for_100_credits'
+  },
+  'price_40': { 
+    amount: 5, 
+    credits: 40,
+    paymentLink: 'your_stripe_payment_link_for_40_credits'
+  },
+  'price_15': { 
+    amount: 3, 
+    credits: 15,
+    paymentLink: 'your_stripe_payment_link_for_15_credits'
+  }
 } as const;
 
 export function CreditsPopup({ user }: CreditsPopupProps) {
-  const [credits, setCredits] = useState(5) // Default credits as per your schema
+  const [credits, setCredits] = useState(5)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(false)
   const supabase = createClientComponentClient()
@@ -77,29 +88,8 @@ export function CreditsPopup({ user }: CreditsPopupProps) {
     }
   }, [user?.id, fetchCredits, fetchTransactions])
 
-  const handlePurchase = async (priceId: keyof typeof PRICE_OPTIONS) => {
-    setLoading(true)
-    try {
-      const response = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ priceId, userId: user.id })
-      })
-
-      const { sessionId, error } = await response.json()
-      if (error) throw new Error(error)
-
-      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
-      if (!stripe) throw new Error('Failed to load Stripe')
-
-      await stripe.redirectToCheckout({ sessionId })
-    } catch (error) {
-      console.error('Purchase error:', error)
-    } finally {
-      setLoading(false)
-    }
+  const handlePurchase = (paymentLink: string) => {
+    window.location.href = `${paymentLink}?client_reference_id=${user.id}`
   }
 
   return (
@@ -112,11 +102,11 @@ export function CreditsPopup({ user }: CreditsPopupProps) {
       </div>
 
       <div className="space-y-4 mb-8">
-        {(Object.entries(PRICE_OPTIONS) as [keyof typeof PRICE_OPTIONS, { amount: number, credits: number }][]).map(([priceId, { amount, credits }]) => (
+        {(Object.entries(PRICE_OPTIONS) as [keyof typeof PRICE_OPTIONS, { amount: number, credits: number, paymentLink: string }][]).map(([priceId, { amount, credits, paymentLink }]) => (
           <Button
             key={priceId}
             className="w-full justify-between"
-            onClick={() => handlePurchase(priceId)}
+            onClick={() => handlePurchase(paymentLink)}
             disabled={loading}
           >
             <span>{credits} credits</span>
