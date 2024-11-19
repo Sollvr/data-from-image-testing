@@ -29,7 +29,7 @@ const supabaseAdmin = createClient(
 
 export async function POST(req: Request) {
   const body = await req.text()
-  const signature = (await headers()).get('stripe-signature') ?? ''
+  const signature = headers().get('stripe-signature') ?? ''
   
   try {
     const event = stripe.webhooks.constructEvent(
@@ -38,19 +38,8 @@ export async function POST(req: Request) {
       process.env.STRIPE_WEBHOOK_SECRET!
     )
 
-    const payload = JSON.parse(body)
-    console.log('Webhook event type:', event.type)
-    console.log('Payment details:', {
-      email: payload?.data?.object?.billing_details?.email,
-      amount: payload?.data?.object?.amount,
-      created: new Date(payload?.created * 1000).toISOString(),
-      paymentType: payload?.type,
-      receiptEmail: payload?.data?.object?.receipt_email,
-      receiptUrl: payload?.data?.object?.receipt_url,
-      currency: payload?.data?.object?.currency
-    })
+    console.log('Webhook event received:', event.type)
 
-    // Handle successful checkout
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session
       const customerEmail = session.customer_details?.email
@@ -59,26 +48,39 @@ export async function POST(req: Request) {
         throw new Error('No customer email provided')
       }
 
+      console.log('Processing payment for email:', customerEmail)
+
       // Find user by email
       const { data: user, error: userError } = await supabaseAdmin
         .from('profiles')
-        .select('id')
+        .select('id, credits')
         .eq('email', customerEmail)
         .single()
 
       if (userError || !user) {
+        console.error('User not found:', userError)
         throw new Error('User not found')
       }
 
+      // Determine credits amount from payment
+      let creditsToAdd = 0
+      if (session.amount_total === 1000) creditsToAdd = 100
+      else if (session.amount_total === 500) creditsToAdd = 40
+      else if (session.amount_total === 300) creditsToAdd = 15
+
+      console.log('Adding credits:', creditsToAdd, 'for user:', user.id)
+
       // Update user credits
+      const newCredits = (user.credits || 0) + creditsToAdd
       const { error: creditError } = await supabaseAdmin
         .from('profiles')
-        .update({ 
-          credits: `credits + ${session.metadata?.credits || 0}`
-        })
+        .update({ credits: newCredits })
         .eq('id', user.id)
 
-      if (creditError) throw creditError
+      if (creditError) {
+        console.error('Error updating credits:', creditError)
+        throw creditError
+      }
 
       // Record transaction
       const { error: transactionError } = await supabaseAdmin
@@ -86,13 +88,16 @@ export async function POST(req: Request) {
         .insert({
           user_id: user.id,
           amount: session.amount_total,
-          credits: parseInt(session.metadata?.credits || '0'),
+          credits: creditsToAdd,
           stripe_payment_id: session.payment_intent
         })
 
-      if (transactionError) throw transactionError
+      if (transactionError) {
+        console.error('Error recording transaction:', transactionError)
+        throw transactionError
+      }
 
-      console.log('Successfully processed payment for user:', user.id)
+      console.log('Successfully processed payment and updated credits')
     }
 
     return NextResponse.json({ 
