@@ -43,7 +43,6 @@ const PRICE_OPTIONS = {
 export function CreditsPopup({ user }: CreditsPopupProps) {
   const [credits, setCredits] = useState(5)
   const [transactions, setTransactions] = useState<Transaction[]>([])
-  const [loading, setLoading] = useState(false)
   const supabase = createClientComponentClient()
 
   const fetchCredits = useCallback(async () => {
@@ -107,7 +106,6 @@ export function CreditsPopup({ user }: CreditsPopupProps) {
             key={priceId}
             className="w-full justify-between"
             onClick={() => handlePurchase(paymentLink)}
-            disabled={loading}
           >
             <span>{credits} credits</span>
             <span>${amount}</span>
