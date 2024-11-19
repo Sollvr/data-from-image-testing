@@ -124,7 +124,7 @@ export default function Component() {
 
         const { data, error } = await supabase
 
-          .from('users')
+          .from('profiles')
 
           .select('credits')
 
@@ -276,7 +276,7 @@ export default function Component() {
 
       const { error: creditError } = await supabase
 
-        .from('users')
+        .from('profiles')
 
         .update({ credits: credits - 1 })
 
@@ -394,7 +394,7 @@ export default function Component() {
 
       const { error: refundError } = await supabase
 
-        .from('users')
+        .from('profiles')
 
         .update({ credits: credits })
 

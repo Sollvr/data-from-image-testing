@@ -26,17 +26,17 @@ const PRICE_OPTIONS = {
   'price_100': { 
     amount: 10, 
     credits: 100,
-    paymentLink: 'your_stripe_payment_link_for_100_credits'
+    paymentLink: 'https://buy.stripe.com/14kaFDebL2GmgqQeUV'
   },
   'price_40': { 
     amount: 5, 
     credits: 40,
-    paymentLink: 'your_stripe_payment_link_for_40_credits'
+    paymentLink: 'https://buy.stripe.com/fZe4hf4Bb80G3E4002'
   },
   'price_15': { 
     amount: 3, 
     credits: 15,
-    paymentLink: 'your_stripe_payment_link_for_15_credits'
+    paymentLink: 'https://buy.stripe.com/9AQ4hf5Ff0ye6QgbIL'
   }
 } as const;
 
@@ -47,7 +47,7 @@ export function CreditsPopup({ user }: CreditsPopupProps) {
 
   const fetchCredits = useCallback(async () => {
     const { data, error } = await supabase
-      .from('users')
+      .from('profiles')
       .select('credits')
       .eq('id', user.id)
       .single()
