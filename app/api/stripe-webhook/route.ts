@@ -58,7 +58,7 @@ export async function POST(req: Request) {
       if (amount === 999) creditsToAdd = 100
       else if (amount === 499) creditsToAdd = 40
       else if (amount === 299) creditsToAdd = 15
-      else if (amount === 1) creditsToAdd = 3
+      else if (amount === 51) creditsToAdd = 3
 
       // First find the profile
       const { data: existingProfile, error: findError } = await supabaseAdmin
