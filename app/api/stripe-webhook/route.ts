@@ -100,17 +100,15 @@ export async function POST(req: Request) {
 
 
 
-      // Determine credits based on amount in cents
-
       let creditsToAdd = 0
 
-      if (amount === 999) creditsToAdd = 100      // $9.99
+      if (amount === 999) creditsToAdd = 100
 
-      else if (amount === 499) creditsToAdd = 40  // $4.99
+      else if (amount === 499) creditsToAdd = 40
 
-      else if (amount === 299) creditsToAdd = 15  // $2.99
+      else if (amount === 299) creditsToAdd = 15
 
-      else if (amount === 51) creditsToAdd = 3     // $0.51 test price
+      else if (amount === 1) creditsToAdd = 3
 
 
 
@@ -122,13 +120,13 @@ export async function POST(req: Request) {
 
 
 
-      // Find user in profiles table
+      // Find profile directly
 
       const { data: profile, error: profileError } = await supabaseAdmin
 
         .from('profiles')
 
-        .select('id, credits')
+        .select('id, credits, email')
 
         .eq('email', customerEmail)
 
@@ -136,7 +134,7 @@ export async function POST(req: Request) {
 
 
 
-      if (profileError || !profile) {
+      if (profileError) {
 
         console.error('Profile lookup error:', profileError)
 
@@ -146,11 +144,11 @@ export async function POST(req: Request) {
 
 
 
-      console.log('Found profile:', { id: profile.id, currentCredits: profile.credits })
+      console.log('Found profile:', profile)
 
 
 
-      // Update credits in profiles table
+      // Update credits
 
       const newCredits = (profile.credits || 0) + creditsToAdd
 
@@ -180,21 +178,13 @@ export async function POST(req: Request) {
 
 
 
-      console.log('Credits updated:', { 
-
-        oldCredits: profile.credits,
-
-        added: creditsToAdd,
-
-        newTotal: newCredits 
-
-      })
+      console.log('Credits updated, recording transaction...')
 
 
 
       // Record transaction
 
-      const { error: transactionError } = await supabaseAdmin
+      const { data: transactionData, error: transactionError } = await supabaseAdmin
 
         .from('transactions')
 
@@ -212,6 +202,8 @@ export async function POST(req: Request) {
 
         })
 
+        .select()
+
 
 
       if (transactionError) {
@@ -224,17 +216,7 @@ export async function POST(req: Request) {
 
 
 
-      console.log('Transaction recorded successfully:', {
-
-        userId: profile.id,
-
-        amount: amount,
-
-        credits: creditsToAdd,
-
-        paymentId: session.payment_intent
-
-      })
+      console.log('Transaction recorded:', transactionData)
 
     }
 
