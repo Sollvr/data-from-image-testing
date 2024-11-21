@@ -56,14 +56,17 @@ export async function POST(req: Request) {
       if (amount === 999) creditsToAdd = 100
       else if (amount === 499) creditsToAdd = 40
       else if (amount === 299) creditsToAdd = 15
-      else if (amount === 51) creditsToAdd = 3
+      else if (amount === 1) creditsToAdd = 3
 
       // Get auth user by email
-      let { data: userData, error: userError } = await supabaseAdmin
+      const { data: initialUserData, error: userError } = await supabaseAdmin
         .from('auth.users')
         .select('id')
         .eq('email', customerEmail)
         .single()
+
+      // Initialize userData
+      let userData = initialUserData
 
       // If user not found, create a profile
       if (userError) {
