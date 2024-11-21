@@ -17,33 +17,43 @@ const supabaseAdmin = createClient(
 
 export async function POST(req: Request) {
   const body = await req.text()
-  const headersList = await headers()
-  const signature = headersList.get('stripe-signature') ?? ''
+  const signature = (await headers()).get('stripe-signature') ?? ''
   
   try {
+    // Log the raw webhook data
+    console.log('Received webhook. Signature:', signature)
+    console.log('Raw body:', body)
+
     const event = stripe.webhooks.constructEvent(
       body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
     )
 
-    console.log('Webhook event received:', event.type)
-    console.log('Event data:', JSON.stringify(event.data.object, null, 2))
+    console.log('Webhook event type:', event.type)
+    console.log('Full event data:', JSON.stringify(event.data, null, 2))
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session
+      console.log('Session details:', {
+        customerEmail: session.customer_details?.email,
+        amount: session.amount_total,
+        paymentStatus: session.payment_status,
+        paymentIntent: session.payment_intent
+      })
+
       const customerEmail = session.customer_details?.email
 
-      console.log('Processing payment for:', customerEmail)
-      console.log('Amount:', session.amount_total)
-
-      // Determine credits based on amount
+      // Determine credits based on amount in cents
       let creditsToAdd = 0
-      if (session.amount_total === 1000) creditsToAdd = 100
-      else if (session.amount_total === 500) creditsToAdd = 40
-      else if (session.amount_total === 300) creditsToAdd = 15
+      if (session.amount_total === 999) creditsToAdd = 100      // $9.99
+      else if (session.amount_total === 499) creditsToAdd = 40   // $4.99
+      else if (session.amount_total === 299) creditsToAdd = 15   // $2.99
 
-      console.log('Credits to add:', creditsToAdd)
+      console.log('Credits calculation:', {
+        amount: session.amount_total,
+        creditsToAdd: creditsToAdd
+      })
 
       if (!customerEmail || !creditsToAdd) {
         console.error('Missing required data:', { customerEmail, creditsToAdd })
@@ -53,30 +63,37 @@ export async function POST(req: Request) {
       // Find user by email
       const { data: user, error: userError } = await supabaseAdmin
         .from('profiles')
-        .select('id, credits')
+        .select('id, credits, email')
         .eq('email', customerEmail)
         .single()
 
+      console.log('User lookup result:', { user, error: userError })
+
       if (userError || !user) {
         console.error('User lookup error:', userError)
-        throw new Error('User not found')
+        throw new Error(`User not found for email: ${customerEmail}`)
       }
-
-      console.log('Found user:', user.id, 'Current credits:', user.credits)
 
       // Update user credits
       const newCredits = (user.credits || 0) + creditsToAdd
+      console.log('Credit calculation:', {
+        currentCredits: user.credits,
+        creditsToAdd,
+        newCredits
+      })
+
       const { error: creditError } = await supabaseAdmin
         .from('profiles')
         .update({ credits: newCredits })
         .eq('id', user.id)
+        .eq('email', customerEmail)
 
       if (creditError) {
         console.error('Credit update error:', creditError)
         throw creditError
       }
 
-      console.log('Updated credits to:', newCredits)
+      console.log('Credits updated successfully')
 
       // Record transaction
       const { error: transactionError } = await supabaseAdmin
