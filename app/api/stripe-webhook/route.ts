@@ -52,47 +52,47 @@ export async function POST(req: Request) {
         throw new Error('No customer email provided')
       }
 
-      // Get auth user by email
-      const { data: userData, error: userError } = await supabaseAdmin
-        .from('auth.users')
-        .select('id')
-        .eq('email', customerEmail)
-        .single()
-
-      if (userError) {
-        console.error('User lookup error:', userError)
-        throw new Error(`User not found for email: ${customerEmail}`)
-      }
-
-      console.log('Found user:', userData)
-
       let creditsToAdd = 0
       if (amount === 999) creditsToAdd = 100
       else if (amount === 499) creditsToAdd = 40
       else if (amount === 299) creditsToAdd = 15
       else if (amount === 51) creditsToAdd = 3
 
-      console.log('Credits to add:', creditsToAdd)
+      // Get auth user by email
+      let { data: userData, error: userError } = await supabaseAdmin
+        .from('auth.users')
+        .select('id')
+        .eq('email', customerEmail)
+        .single()
 
-      // Upsert profile
-      const { error: upsertError } = await supabaseAdmin
-        .from('profiles')
-        .upsert({
-          id: userData.id,
-          email: customerEmail,
-          credits: creditsToAdd,
-          updated_at: new Date().toISOString()
-        })
-        .select()
+      // If user not found, create a profile
+      if (userError) {
+        console.log('User not found, creating profile...')
+        const { data: newProfile, error: createError } = await supabaseAdmin
+          .from('profiles')
+          .insert({
+            email: customerEmail,
+            credits: creditsToAdd,
+            updated_at: new Date().toISOString()
+          })
+          .select()
+          .single()
 
-      if (upsertError) {
-        console.error('Profile upsert error:', upsertError)
-        throw upsertError
+        if (createError) {
+          console.error('Profile creation error:', createError)
+          throw createError
+        }
+        userData = { id: newProfile.id }
+        console.log('Created new profile:', newProfile)
       }
 
-      console.log('Profile updated')
+      console.log('Adding credits:', creditsToAdd)
 
-      // After upsert, update the credits separately if needed
+      if (!userData) {
+        throw new Error('Failed to find user profile')
+      }
+
+      // Update existing profile
       const { error: updateError } = await supabaseAdmin
         .from('profiles')
         .update({ 
@@ -107,6 +107,10 @@ export async function POST(req: Request) {
       }
 
       console.log('Credits updated')
+
+      if (!userData) {
+        throw new Error('Failed to find or create user profile')
+      }
 
       // Record transaction
       const { error: transactionError } = await supabaseAdmin
