@@ -33,20 +33,22 @@ export async function POST(req: Request) {
   const signature = headersList.get('stripe-signature') ?? ''
   
   try {
+    console.log('Starting webhook processing...')
+    
     const event = stripe.webhooks.constructEvent(
       body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
     )
 
-    console.log('Event type:', event.type)
+    console.log('Event constructed:', event.type)
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session
       const customerEmail = session.customer_details?.email
       const amount = session.amount_total
 
-      console.log('Processing payment:', { customerEmail, amount })
+      console.log('Session details:', { customerEmail, amount })
 
       if (!customerEmail) {
         throw new Error('No customer email provided')
@@ -58,19 +60,21 @@ export async function POST(req: Request) {
       else if (amount === 299) creditsToAdd = 15
       else if (amount === 1) creditsToAdd = 3
 
-      // Get auth user by email
-      const { data: initialUserData, error: userError } = await supabaseAdmin
-        .from('auth.users')
-        .select('id')
+      // First find the profile
+      const { data: existingProfile, error: findError } = await supabaseAdmin
+        .from('profiles')
+        .select('*')
         .eq('email', customerEmail)
         .single()
 
-      // Initialize userData
-      let userData = initialUserData
+      if (findError && findError.code !== 'PGRST116') { // PGRST116 is "not found" error
+        console.error('Error finding profile:', findError)
+        throw findError
+      }
 
-      // If user not found, create a profile
-      if (userError) {
-        console.log('User not found, creating profile...')
+      let profile
+      if (!existingProfile) {
+        // Create new profile
         const { data: newProfile, error: createError } = await supabaseAdmin
           .from('profiles')
           .insert({
@@ -78,48 +82,42 @@ export async function POST(req: Request) {
             credits: creditsToAdd,
             updated_at: new Date().toISOString()
           })
-          .select()
+          .select('*')
           .single()
 
         if (createError) {
-          console.error('Profile creation error:', createError)
+          console.error('Error creating profile:', createError)
           throw createError
         }
-        userData = { id: newProfile.id }
-        console.log('Created new profile:', newProfile)
+        profile = newProfile
+      } else {
+        // Update existing profile
+        const { data: updatedProfile, error: updateError } = await supabaseAdmin
+          .from('profiles')
+          .update({
+            credits: existingProfile.credits + creditsToAdd,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingProfile.id)
+          .select('*')
+          .single()
+
+        if (updateError) {
+          console.error('Error updating profile:', updateError)
+          throw updateError
+        }
+        profile = updatedProfile
       }
 
-      console.log('Adding credits:', creditsToAdd)
-
-      if (!userData) {
-        throw new Error('Failed to find user profile')
-      }
-
-      // Update existing profile
-      const { error: updateError } = await supabaseAdmin
-        .from('profiles')
-        .update({ 
-          credits: supabaseAdmin.rpc('increment_credits', { amount: creditsToAdd }),
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', userData.id)
-
-      if (updateError) {
-        console.error('Profile update error:', updateError)
-        throw updateError
-      }
-
-      console.log('Credits updated')
-
-      if (!userData) {
-        throw new Error('Failed to find or create user profile')
-      }
+      console.log('Profile operation successful:', profile)
 
       // Record transaction
+      console.log('Attempting to record transaction...')
+      
       const { error: transactionError } = await supabaseAdmin
         .from('transactions')
         .insert({
-          user_id: userData.id,
+          user_id: profile.id,
           amount: amount,
           credits: creditsToAdd,
           stripe_payment_id: session.payment_intent,
@@ -127,11 +125,11 @@ export async function POST(req: Request) {
         })
 
       if (transactionError) {
-        console.error('Transaction error:', transactionError)
-        throw transactionError
+        console.error('Full transaction error:', transactionError)
+        throw new Error(`Transaction failed: ${JSON.stringify(transactionError)}`)
       }
 
-      console.log('Transaction recorded')
+      console.log('Transaction recorded successfully')
     }
 
     return NextResponse.json({ 
@@ -140,11 +138,11 @@ export async function POST(req: Request) {
       timestamp: new Date().toISOString()
     })
   } catch (error) {
-    console.error('Webhook error:', error)
+    console.error('Detailed webhook error:', error)
     return NextResponse.json(
       {
         status: 'failed',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : JSON.stringify(error),
         timestamp: new Date().toISOString()
       },
       { status: 400 }
